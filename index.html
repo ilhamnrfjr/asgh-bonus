@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>San Andreas Fire Department - Hospital Bonus</title>
-    <link rel="icon" type="image/png" href="img/FM.png" />
     <style>
         * {
             box-sizing: border-box;
@@ -31,16 +30,31 @@
             background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
             color: white;
             padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .header-logo {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+        }
+
+        .header-content {
+            flex: 1;
             text-align: center;
+            padding: 0 20px;
         }
         
-        .header h1 {
+        .header-content h1 {
             margin: 0;
             font-size: 24px;
             font-weight: 600;
         }
         
-        .header h2 {
+        .header-content h2 {
             margin: 5px 0 0;
             font-size: 18px;
             font-weight: 500;
@@ -418,6 +432,29 @@
             table {
                 min-width: 800px;
             }
+
+            .header {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+
+            .header-logo {
+                width: 60px;
+                height: 60px;
+            }
+
+            .header-content {
+                padding: 0;
+            }
+
+            .header-content h1 {
+                font-size: 20px;
+            }
+
+            .header-content h2 {
+                font-size: 16px;
+            }
         }
     </style>
     <!-- Library untuk parsing Excel -->
@@ -428,8 +465,12 @@
     
     <div class="container">
         <div class="header">
-            <h1>San Andreas Fire Department</h1>
-            <h2>Hospital Bonus Details</h2>
+            <img src="img/FM.png" alt="SAFD Logo Left" class="header-logo">
+            <div class="header-content">
+                <h1>San Andreas Fire Department</h1>
+                <h2>Hospital Bonus Details</h2>
+            </div>
+            <img src="img/ASGH.png" alt="SAFD Logo Right" class="header-logo">
         </div>
         
         <div class="week-banner">
@@ -444,10 +485,9 @@
         </div>
         
         <div class="import-section">
-            <h3>Import Data dari Portal</h3>
+            <h3>Import Data dari Excel</h3>
             <div class="import-info">
                 <strong>Info:</strong> Data Excel akan difilter dan hanya nama yang sudah terdaftar di sistem yang akan diupdate dengan nilai Bills Income dari Excel.<br>
-                <strong>Note:</strong> Jika setelah import ada data yang kosong, berarti personel tersebut tidak mendapatkan bill di week itu, isikan angka 0 pada input zone.<br>
                 <small style="color: #4caf50;"><strong>✓ Data Anda akan tersimpan otomatis</strong> - perubahan tidak akan hilang saat website ditutup dan dibuka kembali.</small>
             </div>
             <div class="import-options">
@@ -504,14 +544,14 @@
         </div>
         
         <div class="footer">
-            &copy; Jareth Ashford - Ilham
+            &copy; 2023 San Andreas Fire Department - Hospital Bonus System
         </div>
     </div>
 
     <script>
         // Data karyawan tetap yang akan selalu ditampilkan
         const defaultEmployees = [
-            { name: "Flavyu Thorvaldsson", rank: "Hospital Executive", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
+            { name: "Flavyu Thorvaldsson", rank: "Hospital Executive", absence: "Full Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
             { name: "Jareth Ashford", rank: "Executive Assistant", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
             { name: "Rainer Joyce", rank: "Executive Assistant", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
             { name: "Archibald Brecken", rank: "Medical Director", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
@@ -552,20 +592,22 @@
         const STORAGE_KEY = 'hospital_bonus_data';
         const WEEK_KEY = 'hospital_bonus_week';
 
-        // Fungsi untuk menyimpan data ke memori internal
+        // Fungsi untuk menyimpan data ke localStorage
         function saveData() {
             try {
-                // Simulasi penyimpanan dengan variabel global
-                window.hospitalBonusData = {
+                const dataToSave = {
                     employees: JSON.parse(JSON.stringify(employees)),
                     week: document.getElementById('week-input').value,
                     timestamp: new Date().toISOString()
                 };
                 
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
+                localStorage.setItem(WEEK_KEY, document.getElementById('week-input').value);
+                
                 showSaveNotification();
-                console.log('Data berhasil disimpan:', window.hospitalBonusData);
+                console.log('Data berhasil disimpan ke localStorage:', dataToSave);
             } catch (error) {
-                console.error('Error saving data:', error);
+                console.error('Error saving data to localStorage:', error);
                 alert('Terjadi kesalahan saat menyimpan data.');
             }
         }
@@ -580,17 +622,25 @@
             }, 3000);
         }
 
-        // Fungsi untuk memuat data dari memori internal
+        // Fungsi untuk memuat data dari localStorage
         function loadData() {
             try {
-                if (window.hospitalBonusData && window.hospitalBonusData.employees) {
-                    employees = JSON.parse(JSON.stringify(window.hospitalBonusData.employees));
-                    document.getElementById('week-input').value = window.hospitalBonusData.week || 37;
-                    console.log('Data berhasil dimuat:', window.hospitalBonusData);
+                const savedData = localStorage.getItem(STORAGE_KEY);
+                const savedWeek = localStorage.getItem(WEEK_KEY);
+                
+                if (savedData) {
+                    const parsedData = JSON.parse(savedData);
+                    employees = parsedData.employees || [];
+                    
+                    if (savedWeek) {
+                        document.getElementById('week-input').value = savedWeek;
+                    }
+                    
+                    console.log('Data berhasil dimuat dari localStorage:', parsedData);
                     return true;
                 }
             } catch (error) {
-                console.error('Error loading data:', error);
+                console.error('Error loading data from localStorage:', error);
             }
             return false;
         }
@@ -930,7 +980,10 @@
                 document.getElementById('file-name').textContent = "Tidak ada file dipilih";
                 document.getElementById('excel-file').value = "";
                 excelData = null;
-                window.hospitalBonusData = null;
+                
+                // Hapus data dari localStorage
+                localStorage.removeItem(STORAGE_KEY);
+                localStorage.removeItem(WEEK_KEY);
                 
                 renderSpreadsheet();
                 document.getElementById('bbcode-section').style.display = 'none';
@@ -1173,6 +1226,9 @@ Hospital Bonus Details[/size][/b][/color][/aligntable]
             
             // Set event listener untuk file input
             document.getElementById('excel-file').addEventListener('change', handleExcelUpload);
+
+            // Auto save setiap 30 detik (opsional)
+            setInterval(saveData, 30000);
             
             console.log('Application initialized with persistent data');
         });
