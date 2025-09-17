@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>San Andreas Fire Department - Hospital Bonus</title>
+    <link rel="icon" type="image/png" href="img/FM.png" />
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f2f5;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 600;
+        }
+        
+        .header h2 {
+            margin: 5px 0 0;
+            font-size: 18px;
+            font-weight: 500;
+        }
+        
+        .week-banner {
+            background-color: #e53935;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .week-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 5px;
+        }
+        
+        .week-input {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.7);
+            color: white;
+            padding: 4px;
+            border-radius: 4px;
+            width: 40px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .week-input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .hospital-name {
+            background-color: #f5f5f5;
+            text-align: center;
+            padding: 12px;
+            font-size: 20px;
+            font-weight: bold;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .import-section {
+            padding: 15px;
+            background-color: #e8f5e9;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .import-section h3 {
+            margin: 0;
+            color: #2e7d32;
+        }
+        
+        .import-options {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .file-input-container {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+        
+        .file-input {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        
+        .file-input-button {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: #4caf50;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .file-input-button:hover {
+            background-color: #43a047;
+        }
+        
+        .import-button {
+            padding: 10px 15px;
+            background-color: #3f51b5;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .import-button:hover {
+            background-color: #3949ab;
+        }
+
+        .import-info {
+            padding: 10px;
+            background-color: #fff3e0;
+            border: 1px solid #ffcc02;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #e65100;
+        }
+        
+        .spreadsheet {
+            overflow-x: auto;
+            width: 100%;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1100px;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px 12px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #3f51b5;
+            color: white;
+            font-weight: 500;
+            position: sticky;
+            top: 0;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        tr:hover {
+            background-color: #f1f3f4;
+        }
+        
+        input[type="text"], input[type="number"], select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        input[type="text"]:focus, input[type="number"]:focus, select:focus {
+            outline: none;
+            border-color: #3f51b5;
+            box-shadow: 0 0 0 2px rgba(63, 81, 181, 0.2);
+        }
+        
+        .conclusion-penalty {
+            color: #d93025;
+            font-weight: 500;
+        }
+        
+        .conclusion-no-penalty {
+            color: #0f9d58;
+            font-weight: 500;
+        }
+        
+        .grand-total {
+            background-color: #e8f5e9;
+            font-weight: bold;
+        }
+        
+        .grand-total td {
+            border-top: 2px solid #4caf50;
+        }
+        
+        .grand-total-value {
+            color: #2e7d32;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        .buttons {
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            background-color: #f5f5f5;
+            border-top: 1px solid #ddd;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+        
+        .add-row {
+            background-color: #4caf50;
+            color: white;
+        }
+        
+        .add-row:hover {
+            background-color: #43a047;
+        }
+        
+        .remove-row {
+            background-color: #f44336;
+            color: white;
+        }
+        
+        .remove-row:hover {
+            background-color: #e53935;
+        }
+
+        .reset-button {
+            background-color: #ff9800;
+            color: white;
+        }
+
+        .reset-button:hover {
+            background-color: #f57c00;
+        }
+
+        .save-button {
+            background-color: #2196f3;
+            color: white;
+        }
+
+        .save-button:hover {
+            background-color: #1976d2;
+        }
+
+        .bbcode-button {
+            background-color: #9c27b0;
+            color: white;
+        }
+
+        .bbcode-button:hover {
+            background-color: #7b1fa2;
+        }
+
+        .bbcode-section {
+            margin: 20px;
+            padding: 20px;
+            background-color: #f5f5f5;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .bbcode-output {
+            width: 100%;
+            height: 400px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            resize: vertical;
+            background-color: white;
+        }
+
+        .copy-button {
+            background-color: #4caf50;
+            color: white;
+            margin-top: 10px;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .copy-button:hover {
+            background-color: #45a049;
+        }
+
+        .move-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .move-btn {
+            background-color: #607d8b;
+            color: white;
+            border: none;
+            padding: 2px 6px;
+            border-radius: 2px;
+            cursor: pointer;
+            font-size: 12px;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .move-btn:hover {
+            background-color: #546e7a;
+        }
+
+        .move-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .footer {
+            padding: 15px;
+            text-align: center;
+            background-color: #1a237e;
+            color: white;
+            font-size: 14px;
+        }
+
+        .data-updated {
+            background-color: #c8e6c9 !important;
+            animation: highlight 2s ease-out;
+        }
+
+        .save-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #4caf50;
+            color: white;
+            padding: 15px;
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.3s, transform 0.3s;
+        }
+
+        .save-notification.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes highlight {
+            0% { background-color: #4caf50; }
+            100% { background-color: #c8e6c9; }
+        }
+        
+        @media (max-width: 768px) {
+            .import-options {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .buttons {
+                flex-direction: column;
+            }
+            
+            button {
+                width: 100%;
+                margin: 5px 0;
+            }
+
+            table {
+                min-width: 800px;
+            }
+        }
+    </style>
+    <!-- Library untuk parsing Excel -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+    <div id="save-notification" class="save-notification">Data berhasil disimpan!</div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>San Andreas Fire Department</h1>
+            <h2>Hospital Bonus Details</h2>
+        </div>
+        
+        <div class="week-banner">
+            <div>WEEK</div>
+            <div class="week-container">
+                <input type="number" id="week-input" class="week-input" value="1" placeholder="XX">
+            </div>
+        </div>
+        
+        <div class="hospital-name">
+            All Saint's General Hospital
+        </div>
+        
+        <div class="import-section">
+            <h3>Import Data dari Portal</h3>
+            <div class="import-info">
+                <strong>Info:</strong> Data Excel akan difilter dan hanya nama yang sudah terdaftar di sistem yang akan diupdate dengan nilai Bills Income dari Excel.<br>
+                <strong>Note:</strong> Jika setelah import ada data yang kosong, berarti personel tersebut tidak mendapatkan bill di week itu, isikan angka 0 pada input zone.<br>
+                <small style="color: #4caf50;"><strong>✓ Data Anda akan tersimpan otomatis</strong> - perubahan tidak akan hilang saat website ditutup dan dibuka kembali.</small>
+            </div>
+            <div class="import-options">
+                <div class="file-input-container">
+                    <div class="file-input-button">Pilih File Excel</div>
+                    <input type="file" id="excel-file" class="file-input" accept=".xlsx, .xls, .csv">
+                </div>
+                <span id="file-name">Tidak ada file dipilih</span>
+                <button class="import-button" onclick="importExcelData()">Import Data</button>
+                <button class="reset-button" onclick="resetToDefault()">Reset Data</button>
+            </div>
+        </div>
+        
+        <div class="spreadsheet">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 5%">Order</th>
+                        <th style="width: 16%">Name</th>
+                        <th style="width: 13%">Rank</th>
+                        <th style="width: 11%">Absence Status</th>
+                        <th style="width: 16%">Absence Link</th>
+                        <th style="width: 11%">Input Zone</th>
+                        <th style="width: 7%">Bonus</th>
+                        <th style="width: 7%">Penalty</th>
+                        <th style="width: 8%">Conclusion</th>
+                    </tr>
+                </thead>
+                <tbody id="spreadsheet-body">
+                    <!-- Data akan diisi oleh JavaScript -->
+                </tbody>
+                <tfoot>
+                    <tr class="grand-total">
+                        <td colspan="6" style="text-align: right; font-weight: bold;">Grand Total:</td>
+                        <td id="grand-total-bonus" class="grand-total-value">0</td>
+                        <td id="grand-total-penalty" class="grand-total-value">0</td>
+                        <td>-</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        
+        <div class="buttons">
+            <button class="add-row" onclick="addRow()">+ Add Row</button>
+            <button class="remove-row" onclick="removeRow()">- Remove Row</button>
+            <button class="save-button" onclick="saveData()">Simpan Data</button>
+            <button class="bbcode-button" onclick="generateBBCode()">Generate BBCode</button>
+        </div>
+
+        <div id="bbcode-section" class="bbcode-section">
+            <h3>BBCode Generator</h3>
+            <textarea id="bbcode-output" class="bbcode-output" readonly></textarea>
+            <button class="copy-button" onclick="copyBBCode()">Copy BBCode</button>
+        </div>
+        
+        <div class="footer">
+            &copy; Jareth Ashford - Ilham
+        </div>
+    </div>
+
+    <script>
+        // Data karyawan tetap yang akan selalu ditampilkan
+        const defaultEmployees = [
+            { name: "Flavyu Thorvaldsson", rank: "Hospital Executive", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
+            { name: "Jareth Ashford", rank: "Executive Assistant", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
+            { name: "Rainer Joyce", rank: "Executive Assistant", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
+            { name: "Archibald Brecken", rank: "Medical Director", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
+            { name: "Demarion Jevander", rank: "Medical Director", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
+            { name: "Devanarley Wyattavery", rank: "Attending Physician", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
+            { name: "Flovino Neophytus", rank: "Attending Physician", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
+            { name: "Hank Mccormick", rank: "Attending Physician", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
+            { name: "Karma Kingswell", rank: "Attending Physician", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
+            { name: "Vannicio Valiente", rank: "Fellow", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
+            { name: "Farlan Morgan", rank: "Senior Resident", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
+            { name: "Vathlauss Hasteinsson", rank: "Senior Resident", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
+            { name: "Sano Franzi", rank: "Senior Resident", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
+            { name: "Bastian Adler", rank: "Resident", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
+            { name: "Dalton Morbidelli", rank: "Resident", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
+            { name: "Olivia Gabriella", rank: "Resident", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" }
+        ];
+
+        // Copy data default ke employees untuk ditampilkan
+        let employees = [];
+
+        // Opsi untuk dropdown rank
+        const rankOptions = [
+            "Hospital Executive", 
+            "Executive Assistant", 
+            "Medical Director", 
+            "Attending Physician", 
+            "Fellow", 
+            "Senior Resident", 
+            "Resident"
+        ];
+        
+        const absenceOptions = ["Full Absence", "No Absence"];
+        
+        // Variabel untuk menyimpan data Excel
+        let excelData = null;
+
+        // Key untuk menyimpan data
+        const STORAGE_KEY = 'hospital_bonus_data';
+        const WEEK_KEY = 'hospital_bonus_week';
+
+        // Fungsi untuk menyimpan data ke memori internal
+        function saveData() {
+            try {
+                // Simulasi penyimpanan dengan variabel global
+                window.hospitalBonusData = {
+                    employees: JSON.parse(JSON.stringify(employees)),
+                    week: document.getElementById('week-input').value,
+                    timestamp: new Date().toISOString()
+                };
+                
+                showSaveNotification();
+                console.log('Data berhasil disimpan:', window.hospitalBonusData);
+            } catch (error) {
+                console.error('Error saving data:', error);
+                alert('Terjadi kesalahan saat menyimpan data.');
+            }
+        }
+
+        // Fungsi untuk menampilkan notifikasi penyimpanan
+        function showSaveNotification() {
+            const notification = document.getElementById('save-notification');
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Fungsi untuk memuat data dari memori internal
+        function loadData() {
+            try {
+                if (window.hospitalBonusData && window.hospitalBonusData.employees) {
+                    employees = JSON.parse(JSON.stringify(window.hospitalBonusData.employees));
+                    document.getElementById('week-input').value = window.hospitalBonusData.week || 37;
+                    console.log('Data berhasil dimuat:', window.hospitalBonusData);
+                    return true;
+                }
+            } catch (error) {
+                console.error('Error loading data:', error);
+            }
+            return false;
+        }
+
+        // Fungsi untuk menginisialisasi data
+        function initializeData() {
+            if (!loadData()) {
+                // Jika tidak ada data tersimpan, gunakan data default
+                employees = JSON.parse(JSON.stringify(defaultEmployees));
+                console.log('Menggunakan data default');
+            }
+        }
+
+        // Fungsi untuk merender spreadsheet
+        function renderSpreadsheet() {
+            const tbody = document.getElementById('spreadsheet-body');
+            tbody.innerHTML = '';
+            
+            employees.forEach((emp, index) => {
+                const row = document.createElement('tr');
+                
+                // Kolom Move Buttons
+                const moveCell = document.createElement('td');
+                const moveButtons = document.createElement('div');
+                moveButtons.classList.add('move-buttons');
+                
+                const upBtn = document.createElement('button');
+                upBtn.innerHTML = '▲';
+                upBtn.className = 'move-btn';
+                upBtn.disabled = index === 0;
+                upBtn.onclick = () => moveRowUp(index);
+                
+                const downBtn = document.createElement('button');
+                downBtn.innerHTML = '▼';
+                downBtn.className = 'move-btn';
+                downBtn.disabled = index === employees.length - 1;
+                downBtn.onclick = () => moveRowDown(index);
+                
+                moveButtons.appendChild(upBtn);
+                moveButtons.appendChild(downBtn);
+                moveCell.appendChild(moveButtons);
+                row.appendChild(moveCell);
+                
+                // Kolom Name
+                const nameCell = document.createElement('td');
+                const nameInput = document.createElement('input');
+                nameInput.type = 'text';
+                nameInput.value = emp.name;
+                nameInput.dataset.index = index;
+                nameInput.addEventListener('input', (e) => {
+                    employees[e.target.dataset.index].name = e.target.value;
+                    saveData();
+                });
+                nameCell.appendChild(nameInput);
+                row.appendChild(nameCell);
+                
+                // Kolom Rank
+                const rankCell = document.createElement('td');
+                const rankSelect = document.createElement('select');
+                rankSelect.dataset.index = index;
+                
+                rankOptions.forEach(option => {
+                    const opt = document.createElement('option');
+                    opt.value = option;
+                    opt.textContent = option;
+                    rankSelect.appendChild(opt);
+                });
+                
+                rankSelect.value = emp.rank;
+                rankSelect.addEventListener('change', (e) => {
+                    employees[e.target.dataset.index].rank = e.target.value;
+                    calculateRow(e.target.dataset.index);
+                    saveData();
+                });
+                
+                rankCell.appendChild(rankSelect);
+                row.appendChild(rankCell);
+                
+                // Kolom Absence Status
+                const absenceCell = document.createElement('td');
+                const absenceSelect = document.createElement('select');
+                absenceSelect.dataset.index = index;
+                
+                absenceOptions.forEach(option => {
+                    const opt = document.createElement('option');
+                    opt.value = option;
+                    opt.textContent = option;
+                    absenceSelect.appendChild(opt);
+                });
+                
+                absenceSelect.value = emp.absence;
+                absenceSelect.addEventListener('change', (e) => {
+                    employees[e.target.dataset.index].absence = e.target.value;
+                    calculateRow(e.target.dataset.index);
+                    saveData();
+                    // Show/hide absence link input based on selection
+                    const absenceLinkInput = row.cells[4].querySelector('input');
+                    if (e.target.value === "Full Absence") {
+                        absenceLinkInput.style.display = 'block';
+                        absenceLinkInput.placeholder = 'https://fire.san-andreas.net/viewtopic.php?t=XXXXX';
+                    } else {
+                        absenceLinkInput.style.display = 'none';
+                        absenceLinkInput.value = '';
+                        employees[e.target.dataset.index].absenceLink = '';
+                    }
+                });
+                
+                absenceCell.appendChild(absenceSelect);
+                row.appendChild(absenceCell);
+
+                // Kolom Absence Link
+                const absenceLinkCell = document.createElement('td');
+                const absenceLinkInput = document.createElement('input');
+                absenceLinkInput.type = 'text';
+                absenceLinkInput.value = emp.absenceLink || '';
+                absenceLinkInput.placeholder = 'https://fire.san-andreas.net/viewtopic.php?t=XXXXX';
+                absenceLinkInput.dataset.index = index;
+                absenceLinkInput.style.display = emp.absence === "Full Absence" ? 'block' : 'none';
+                absenceLinkInput.addEventListener('input', (e) => {
+                    employees[e.target.dataset.index].absenceLink = e.target.value;
+                    saveData();
+                });
+                absenceLinkCell.appendChild(absenceLinkInput);
+                row.appendChild(absenceLinkCell);
+                
+                // Kolom Input Zone
+                const inputCell = document.createElement('td');
+                const input = document.createElement('input');
+                input.type = 'number';
+                input.value = emp.inputZone;
+                input.min = 0;
+                input.step = 100;
+                input.dataset.index = index;
+                input.addEventListener('input', (e) => {
+                    employees[e.target.dataset.index].inputZone = e.target.value;
+                    calculateRow(e.target.dataset.index);
+                    saveData();
+                });
+                inputCell.appendChild(input);
+                row.appendChild(inputCell);
+                
+                // Kolom Bonus
+                const bonusCell = document.createElement('td');
+                bonusCell.textContent = emp.bonus;
+                bonusCell.classList.add('bonus-value');
+                row.appendChild(bonusCell);
+                
+                // Kolom Penalty
+                const penaltyCell = document.createElement('td');
+                penaltyCell.textContent = emp.penalty;
+                penaltyCell.classList.add('penalty-value');
+                row.appendChild(penaltyCell);
+                
+                // Kolom Conclusion
+                const conclusionCell = document.createElement('td');
+                conclusionCell.textContent = emp.conclusion;
+                conclusionCell.dataset.index = index;
+                
+                if (emp.conclusion === "Penalty") {
+                    conclusionCell.classList.add('conclusion-penalty');
+                } else {
+                    conclusionCell.classList.add('conclusion-no-penalty');
+                }
+                
+                row.appendChild(conclusionCell);
+                
+                tbody.appendChild(row);
+            });
+            
+            // Hitung grand total setelah render
+            calculateGrandTotal();
+        }
+        
+        // Fungsi untuk menghitung bonus dan penalty per baris
+        function calculateRow(index) {
+            const employee = employees[index];
+            let bonus = parseFloat(employee.inputZone) || 0;
+            
+            // Aturan penghitungan bonus
+            if (employee.rank === "Hospital Executive" || employee.rank === "Executive Assistant") {
+                // Hospital Executive dan Executive Assistant tidak dikurangi 1500
+                employee.bonus = bonus;
+            } else if (employee.absence === "Full Absence") {
+                // Full Absence tidak dikurangi 1500
+                employee.bonus = bonus;
+            } else if (employee.absence === "No Absence") {
+                // No Absence dikurangi 1500 untuk semua rank lainnya
+                employee.bonus = bonus - 1500;
+            } else {
+                // Default (jika ada status lain) tidak dikurangi
+                employee.bonus = bonus;
+            }
+            
+            // Hitung penalty
+            if (employee.bonus < 0) {
+                employee.penalty = Math.abs(employee.bonus);
+                employee.bonus = 0;
+                employee.conclusion = "Penalty";
+            } else {
+                employee.penalty = 0;
+                employee.conclusion = "No Penalty";
+            }
+            
+            // Perbarui tampilan baris
+            updateRowDisplay(index);
+            
+            // Hitung ulang grand total
+            calculateGrandTotal();
+        }
+        
+        // Fungsi untuk menghitung grand total
+        function calculateGrandTotal() {
+            let totalBonus = 0;
+            let totalPenalty = 0;
+            
+            employees.forEach(emp => {
+                totalBonus += parseFloat(emp.bonus) || 0;
+                totalPenalty += parseFloat(emp.penalty) || 0;
+            });
+            
+            document.getElementById('grand-total-bonus').textContent = totalBonus.toLocaleString();
+            document.getElementById('grand-total-penalty').textContent = totalPenalty.toLocaleString();
+        }
+        
+        // Fungsi untuk memperbarui tampilan baris
+        function updateRowDisplay(index) {
+            const employee = employees[index];
+            const rows = document.getElementById('spreadsheet-body').rows;
+            
+            if (rows[index]) {
+                // Update bonus
+                rows[index].cells[6].textContent = employee.bonus.toLocaleString();
+                
+                // Update penalty
+                rows[index].cells[7].textContent = employee.penalty > 0 ? employee.penalty.toLocaleString() : '0';
+                
+                // Update conclusion
+                rows[index].cells[8].textContent = employee.conclusion;
+                
+                // Tambahkan class untuk styling conclusion
+                if (employee.conclusion === "Penalty") {
+                    rows[index].cells[8].className = 'conclusion-penalty';
+                } else {
+                    rows[index].cells[8].className = 'conclusion-no-penalty';
+                }
+            }
+        }
+
+        // Fungsi untuk memindahkan baris ke atas
+        function moveRowUp(index) {
+            if (index > 0) {
+                // Tukar posisi dengan baris di atasnya
+                [employees[index], employees[index - 1]] = [employees[index - 1], employees[index]];
+                
+                // Re-render spreadsheet
+                renderSpreadsheet();
+                
+                // Recalculate semua baris yang terpengaruh
+                calculateRow(index - 1);
+                calculateRow(index);
+                
+                // Highlight baris yang dipindah
+                setTimeout(() => {
+                    highlightUpdatedRow(index - 1);
+                }, 100);
+                
+                saveData();
+            }
+        }
+
+        // Fungsi untuk memindahkan baris ke bawah
+        function moveRowDown(index) {
+            if (index < employees.length - 1) {
+                // Tukar posisi dengan baris di bawahnya
+                [employees[index], employees[index + 1]] = [employees[index + 1], employees[index]];
+                
+                // Re-render spreadsheet
+                renderSpreadsheet();
+                
+                // Recalculate semua baris yang terpengaruh
+                calculateRow(index);
+                calculateRow(index + 1);
+                
+                // Highlight baris yang dipindah
+                setTimeout(() => {
+                    highlightUpdatedRow(index + 1);
+                }, 100);
+                
+                saveData();
+            }
+        }
+
+        // Fungsi untuk highlight baris yang diupdate
+        function highlightUpdatedRow(index) {
+            const rows = document.getElementById('spreadsheet-body').rows;
+            if (rows[index]) {
+                rows[index].classList.add('data-updated');
+                setTimeout(() => {
+                    rows[index].classList.remove('data-updated');
+                }, 2000);
+            }
+        }
+        
+        // Fungsi untuk menambah baris
+        function addRow() {
+            employees.push({
+                name: "New Employee",
+                rank: "Resident",
+                absence: "No Absence",
+                absenceLink: "",
+                inputZone: "",
+                bonus: "",
+                penalty: "0",
+                conclusion: "No Penalty"
+            });
+            
+            renderSpreadsheet();
+            saveData();
+        }
+        
+        // Fungsi untuk menghapus baris
+        function removeRow() {
+            if (employees.length > 1) {
+                employees.pop();
+                renderSpreadsheet();
+                saveData();
+            } else {
+                alert("Tidak dapat menghapus baris terakhir.");
+            }
+        }
+
+        // Fungsi untuk reset ke data default
+        function resetToDefault() {
+            if (confirm("Apakah Anda yakin ingin mereset semua data ke kondisi awal? Data yang tersimpan akan dihapus.")) {
+                employees = JSON.parse(JSON.stringify(defaultEmployees));
+                document.getElementById('week-input').value = 37;
+                document.getElementById('file-name').textContent = "Tidak ada file dipilih";
+                document.getElementById('excel-file').value = "";
+                excelData = null;
+                window.hospitalBonusData = null;
+                
+                renderSpreadsheet();
+                document.getElementById('bbcode-section').style.display = 'none';
+                alert("Data telah direset ke kondisi awal.");
+            }
+        }
+        
+        // Fungsi untuk menangani upload file Excel
+        function handleExcelUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            document.getElementById('file-name').textContent = file.name;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+                
+                // Ambil sheet pertama
+                const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+                
+                // Konversi ke JSON
+                const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+                
+                // Simpan data untuk digunakan nanti
+                excelData = jsonData;
+                
+                // Tampilkan preview data (opsional)
+                console.log("Data Excel yang diupload:", jsonData);
+            };
+            reader.readAsArrayBuffer(file);
+        }
+        
+        // Fungsi untuk import data dari Excel
+        function importExcelData() {
+            if (!excelData || excelData.length < 2) {
+                alert("Silakan upload file Excel terlebih dahulu.");
+                return;
+            }
+            
+            // Header seharusnya: Personnel, Rank, Bills Income
+            const headers = excelData[0].map(h => h ? h.toString().toLowerCase() : '');
+            const personnelIndex = headers.findIndex(h => h.includes('personnel'));
+            const billsIndex = headers.findIndex(h => h.includes('bills'));
+            
+            if (personnelIndex === -1 || billsIndex === -1) {
+                alert("Format Excel tidak sesuai. Pastikan ada kolom 'Personnel' dan 'Bills Income'.");
+                return;
+            }
+            
+            let matchedCount = 0;
+            let updatedRows = [];
+            
+            // Buat map dari data Excel untuk pencarian yang lebih efisien
+            const excelDataMap = new Map();
+            for (let i = 1; i < excelData.length; i++) {
+                const row = excelData[i];
+                if (row.length > Math.max(personnelIndex, billsIndex)) {
+                    const name = row[personnelIndex] ? row[personnelIndex].toString().trim() : '';
+                    const billsIncome = parseFloat(row[billsIndex]) || 0;
+                    
+                    if (name) {
+                        excelDataMap.set(name.toLowerCase(), billsIncome);
+                    }
+                }
+            }
+            
+            // Update hanya karyawan yang sudah ada di daftar tetap
+            employees.forEach((employee, index) => {
+                const employeeNameLower = employee.name.toLowerCase();
+                
+                // Cari nama yang cocok di data Excel
+                if (excelDataMap.has(employeeNameLower)) {
+                    const billsIncome = excelDataMap.get(employeeNameLower);
+                    employee.inputZone = billsIncome;
+                    calculateRow(index);
+                    updatedRows.push(index);
+                    matchedCount++;
+                }
+            });
+            
+            // Render ulang spreadsheet
+            renderSpreadsheet();
+            
+            // Highlight baris yang diupdate
+            updatedRows.forEach(index => {
+                setTimeout(() => highlightUpdatedRow(index), 100);
+            });
+
+            // Save data setelah import
+            saveData();
+            
+            if (matchedCount > 0) {
+                alert(`Data berhasil diimpor!\n\n` +
+                      `- Total nama yang cocok dan diupdate: ${matchedCount}\n` +
+                      `- Total data di Excel: ${excelData.length - 1}\n` +
+                      `- Data yang diupdate akan dihighlight dengan warna hijau`);
+            } else {
+                alert("Tidak ada nama yang cocok antara data Excel dan daftar karyawan yang terdaftar.\n\n" +
+                      "Pastikan nama di Excel sama persis dengan nama di sistem.");
+            }
+            
+            // Log untuk debugging
+            console.log(`Matched ${matchedCount} employees from Excel data`);
+        }
+
+        // Fungsi untuk generate BBCode
+        function generateBBCode() {
+            const week = document.getElementById('week-input').value || 37;
+            let totalBonus = 0;
+            
+            // Hitung total bonus
+            employees.forEach(emp => {
+                totalBonus += parseFloat(emp.bonus) || 0;
+            });
+
+            let bbcode = `[divbox=white]
+[divbox=#007ac4][center][color=transparent][SPACER][/color][/center]
+[aligntable=left,0,100,0,0,0,transparent][img]https://i.postimg.cc/g22qjQZx/Financial-Management.png[/img][/aligntable]
+[space][/space]
+[space][/space]
+[aligntable=#300000;font-family:century gothic;right,0,260,100,0,0,transparent][color=#FFFFFF][size=175]San Andreas[/size]
+[b][size=200]Fire Department
+Hospital Bonus Details[/size][/b][/color][/aligntable]
+[space][/space]
+[center][color=transparent][SPACER][/color][/center][/divbox]
+[space][/space]
+
+[center][color=#007ac4][size=200][b][i]WEEK ${week}[/i][/b][/size][/color][/center]
+
+[space][/space]
+[divbox=white][aligntable=right,0,0,0,0,0,transparent][center][/aligntable][/center][CENTER][size=200][b][color=#007ac4][font=times new roman]All Saint's General Hospital[/font][/color][/b][/size][/CENTER][/divbox]
+
+
+[table]
+[tr]
+[td1=#007ac4][center][b][color=white]Name[/color][/b][/center][/td1]
+[td1=#007ac4][center][b][color=white]Rank[/color][/b][/center][/td1]
+[td1=#007ac4][center][b][color=white]Absence Status[/color][/b][/center][/td1]
+[td1=#007ac4][center][b][color=white]Bonus[/color][/b][/center][/td1]
+[/tr]
+
+`;
+
+            // Generate rows untuk setiap employee yang memiliki input zone atau bonus
+            employees.forEach(emp => {
+                const bonus = parseFloat(emp.bonus) || 0;
+                const inputZone = parseFloat(emp.inputZone) || 0;
+                
+                // Skip employee yang tidak ada input zone sama sekali (field kosong)
+                if (emp.inputZone === "" || emp.inputZone === null || emp.inputZone === undefined) return;
+                
+                // Termasuk yang input zone = 0 tapi sudah diisi
+                console.log(`Processing ${emp.name}: InputZone=${emp.inputZone}, Bonus=${bonus}`);
+
+                // Tentukan apakah menggunakan [cb] atau [cbf]
+                const cbTag = bonus === 0 ? 'cbf' : 'cb';
+                
+                // Format absence status
+                let absenceStatus = 'N/A';
+                if (emp.absence === 'Full Absence') {
+                    if (emp.absenceLink && emp.absenceLink.trim()) {
+                        absenceStatus = `[url=${emp.absenceLink.trim()}]Full Absence[/url]`;
+                    } else {
+                        absenceStatus = 'Full Absence';
+                    }
+                }
+
+                // Format bonus dengan $ dan format angka
+                const formattedBonus = `${bonus.toLocaleString()}`;
+
+                bbcode += `[tr]
+[td1=white][color=black][${cbTag}]${emp.name}[/color]
+[td1=white][center]${emp.rank}[/center][/td1]
+[td1=white][center]${absenceStatus}[/center][/td1]
+[td1=white][center]${formattedBonus}[/center][/td1]
+[/tr]
+
+`;
+            });
+
+            // Add grand total row
+            bbcode += `[tr]
+[td1=#007ac4][center][color=white][b]Grand Total[/b][/color][/center]
+[td1=#007ac4][center][/center][/td1]
+[td1=#007ac4][center][/center][/td1]
+[td1=white][center]${totalBonus.toLocaleString()}[/center][/td1]
+
+[/tr]
+[/table]
+
+[space][/space][/divbox]`;
+
+            // Tampilkan hasil BBCode
+            document.getElementById('bbcode-output').value = bbcode;
+            document.getElementById('bbcode-section').style.display = 'block';
+            
+            // Scroll ke section BBCode
+            document.getElementById('bbcode-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Fungsi untuk copy BBCode ke clipboard
+        function copyBBCode() {
+            const bbcodeOutput = document.getElementById('bbcode-output');
+            bbcodeOutput.select();
+            bbcodeOutput.setSelectionRange(0, 99999); // For mobile devices
+            
+            try {
+                document.execCommand('copy');
+                
+                // Show notification
+                const originalText = document.querySelector('.copy-button').textContent;
+                document.querySelector('.copy-button').textContent = 'Copied!';
+                document.querySelector('.copy-button').style.backgroundColor = '#4caf50';
+                
+                setTimeout(() => {
+                    document.querySelector('.copy-button').textContent = originalText;
+                    document.querySelector('.copy-button').style.backgroundColor = '#4caf50';
+                }, 2000);
+                
+            } catch (err) {
+                alert('Failed to copy BBCode. Please select and copy manually.');
+            }
+        }
+        
+        // Inisialisasi spreadsheet saat halaman dimuat
+        document.addEventListener('DOMContentLoaded', () => {
+            // Inisialisasi data (load dari storage atau gunakan default)
+            initializeData();
+            
+            // Render spreadsheet
+            renderSpreadsheet();
+            
+            // Set event listener untuk input week
+            document.getElementById('week-input').addEventListener('input', (e) => {
+                // Hapus validasi min/max agar bisa input angka bebas
+                saveData();
+            });
+            
+            // Set event listener untuk file input
+            document.getElementById('excel-file').addEventListener('change', handleExcelUpload);
+            
+            console.log('Application initialized with persistent data');
+        });
+    </script>
+</body>
+</html>
