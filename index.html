@@ -488,6 +488,7 @@
             <h3>Import Data dari Excel</h3>
             <div class="import-info">
                 <strong>Info:</strong> Data Excel akan difilter dan hanya nama yang sudah terdaftar di sistem yang akan diupdate dengan nilai Bills Income dari Excel.<br>
+                <strong>Note:</strong> Jika setelah import data ada yang kosong, itu berarti personel tersebut tidak mendapatkan bill di week itu, silahkan diisi angka 0 pada input zone.<br>
                 <small style="color: #4caf50;"><strong>✓ Data Anda akan tersimpan otomatis</strong> - perubahan tidak akan hilang saat website ditutup dan dibuka kembali.</small>
             </div>
             <div class="import-options">
@@ -522,8 +523,8 @@
                 <tfoot>
                     <tr class="grand-total">
                         <td colspan="6" style="text-align: right; font-weight: bold;">Grand Total:</td>
-                        <td id="grand-total-bonus" class="grand-total-value">0</td>
-                        <td id="grand-total-penalty" class="grand-total-value">0</td>
+                        <td id="grand-total-bonus" class="grand-total-value">$0</td>
+                        <td id="grand-total-penalty" class="grand-total-value">$0</td>
                         <td>-</td>
                     </tr>
                 </tfoot>
@@ -544,14 +545,14 @@
         </div>
         
         <div class="footer">
-            &copy; 2023 San Andreas Fire Department - Hospital Bonus System
+            &copy; Jareth Ashford - Ilham
         </div>
     </div>
 
     <script>
         // Data karyawan tetap yang akan selalu ditampilkan
         const defaultEmployees = [
-            { name: "Flavyu Thorvaldsson", rank: "Hospital Executive", absence: "Full Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
+            { name: "Flavyu Thorvaldsson", rank: "Hospital Executive", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
             { name: "Jareth Ashford", rank: "Executive Assistant", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
             { name: "Rainer Joyce", rank: "Executive Assistant", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
             { name: "Archibald Brecken", rank: "Medical Director", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
@@ -560,7 +561,6 @@
             { name: "Flovino Neophytus", rank: "Attending Physician", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
             { name: "Hank Mccormick", rank: "Attending Physician", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
             { name: "Karma Kingswell", rank: "Attending Physician", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
-            { name: "Vannicio Valiente", rank: "Fellow", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
             { name: "Farlan Morgan", rank: "Senior Resident", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
             { name: "Vathlauss Hasteinsson", rank: "Senior Resident", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
             { name: "Sano Franzi", rank: "Senior Resident", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
@@ -784,13 +784,13 @@
                 
                 // Kolom Bonus
                 const bonusCell = document.createElement('td');
-                bonusCell.textContent = emp.bonus;
+                bonusCell.textContent = formatCurrency(emp.bonus);
                 bonusCell.classList.add('bonus-value');
                 row.appendChild(bonusCell);
                 
                 // Kolom Penalty
                 const penaltyCell = document.createElement('td');
-                penaltyCell.textContent = emp.penalty;
+                penaltyCell.textContent = formatCurrency(emp.penalty);
                 penaltyCell.classList.add('penalty-value');
                 row.appendChild(penaltyCell);
                 
@@ -812,6 +812,14 @@
             
             // Hitung grand total setelah render
             calculateGrandTotal();
+        }
+        
+        // Fungsi untuk memformat nilai mata uang dengan simbol $
+        function formatCurrency(value) {
+            if (value === "" || value === null || value === undefined) return "$0";
+            const numValue = parseFloat(value);
+            if (isNaN(numValue)) return "$0";
+            return `$${numValue.toLocaleString()}`;
         }
         
         // Fungsi untuk menghitung bonus dan penalty per baris
@@ -861,8 +869,8 @@
                 totalPenalty += parseFloat(emp.penalty) || 0;
             });
             
-            document.getElementById('grand-total-bonus').textContent = totalBonus.toLocaleString();
-            document.getElementById('grand-total-penalty').textContent = totalPenalty.toLocaleString();
+            document.getElementById('grand-total-bonus').textContent = formatCurrency(totalBonus);
+            document.getElementById('grand-total-penalty').textContent = formatCurrency(totalPenalty);
         }
         
         // Fungsi untuk memperbarui tampilan baris
@@ -872,10 +880,10 @@
             
             if (rows[index]) {
                 // Update bonus
-                rows[index].cells[6].textContent = employee.bonus.toLocaleString();
+                rows[index].cells[6].textContent = formatCurrency(employee.bonus);
                 
                 // Update penalty
-                rows[index].cells[7].textContent = employee.penalty > 0 ? employee.penalty.toLocaleString() : '0';
+                rows[index].cells[7].textContent = formatCurrency(employee.penalty);
                 
                 // Update conclusion
                 rows[index].cells[8].textContent = employee.conclusion;
@@ -1154,7 +1162,7 @@ Hospital Bonus Details[/size][/b][/color][/aligntable]
                 }
 
                 // Format bonus dengan $ dan format angka
-                const formattedBonus = `${bonus.toLocaleString()}`;
+                const formattedBonus = `$${bonus.toLocaleString()}`;
 
                 bbcode += `[tr]
 [td1=white][color=black][${cbTag}]${emp.name}[/color]
@@ -1171,7 +1179,7 @@ Hospital Bonus Details[/size][/b][/color][/aligntable]
 [td1=#007ac4][center][color=white][b]Grand Total[/b][/color][/center]
 [td1=#007ac4][center][/center][/td1]
 [td1=#007ac4][center][/center][/td1]
-[td1=white][center]${totalBonus.toLocaleString()}[/center][/td1]
+[td1=white][center]$${totalBonus.toLocaleString()}[/center][/td1]
 
 [/tr]
 [/table]
