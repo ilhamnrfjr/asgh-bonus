@@ -102,73 +102,6 @@
             border-bottom: 1px solid #ddd;
         }
         
-        .sync-section {
-            padding: 15px;
-            background-color: #e3f2fd;
-            border-bottom: 1px solid #ddd;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        
-        .sync-section h3 {
-            margin: 0;
-            color: #1565c0;
-        }
-        
-        .sync-options {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        
-        .sync-info {
-            padding: 10px;
-            background-color: #e8f5e9;
-            border: 1px solid #4caf50;
-            border-radius: 4px;
-            font-size: 14px;
-            color: #2e7d32;
-        }
-        
-        .sync-button {
-            padding: 10px 15px;
-            background-color: #2196f3;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        
-        .sync-button:hover {
-            background-color: #1976d2;
-        }
-
-        .sync-status {
-            display: inline-block;
-            padding: 5px 10px;
-            border-radius: 4px;
-            font-size: 14px;
-            margin-left: 10px;
-        }
-
-        .sync-status.connected {
-            background-color: #4caf50;
-            color: white;
-        }
-
-        .sync-status.disconnected {
-            background-color: #f44336;
-            color: white;
-        }
-
-        .sync-status.syncing {
-            background-color: #ff9800;
-            color: white;
-        }
-
         .import-section {
             padding: 15px;
             background-color: #e8f5e9;
@@ -482,7 +415,7 @@
         }
         
         @media (max-width: 768px) {
-            .import-options, .sync-options {
+            .import-options {
                 flex-direction: column;
                 align-items: flex-start;
             }
@@ -550,32 +483,13 @@
         <div class="hospital-name">
             All Saint's General Hospital
         </div>
-
-        <!-- Section Sinkronisasi Google Sheets -->
-        <div class="sync-section">
-            <h3>Sinkronisasi Data dengan Google Sheets</h3>
-            <div class="sync-info">
-                <strong>Cara Setup:</strong><br>
-                1. Buka <a href="https://docs.google.com/spreadsheets" target="_blank">Google Sheets</a><br>
-                2. Buat spreadsheet baru dan copy URL-nya<br>
-                3. Paste URL di bawah dan klik "Setup Google Sheets"<br>
-                4. Berikan akses edit ke semua yang perlu mengakses<br>
-                <strong>Note:</strong> Data akan otomatis tersinkronisasi antar semua client!
-            </div>
-            <div class="sync-options">
-                <input type="text" id="sheets-url" placeholder="https://docs.google.com/spreadsheets/d/..." style="flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
-                <button class="sync-button" onclick="setupGoogleSheets()">Setup Google Sheets</button>
-                <button class="sync-button" onclick="loadFromGoogleSheets()">Muat Data</button>
-                <button class="sync-button" onclick="saveToGoogleSheets()">Simpan ke Sheets</button>
-                <span id="sync-status" class="sync-status disconnected">Terputus</span>
-            </div>
-        </div>
         
         <div class="import-section">
             <h3>Import Data dari Excel</h3>
             <div class="import-info">
                 <strong>Info:</strong> Data Excel akan difilter dan hanya nama yang sudah terdaftar di sistem yang akan diupdate dengan nilai Bills Income dari Excel.<br>
-                <strong>Note:</strong> Jika setelah import data ada yang kosong, itu berarti personel tersebut tidak mendapatkan bill di week itu, silahkan diisi angka 0 pada input zone.
+                <strong>Note:</strong> Jika setelah import data ada yang kosong, itu berarti personel tersebut tidak mendapatkan bill di week itu, silahkan diisi angka 0 pada input zone.<br>
+                <small style="color: #4caf50;"><strong>✓ Data Anda akan tersimpan otomatis</strong> - perubahan tidak akan hilang saat website ditutup dan dibuka kembali.</small>
             </div>
             <div class="import-options">
                 <div class="file-input-container">
@@ -620,7 +534,7 @@
         <div class="buttons">
             <button class="add-row" onclick="addRow()">+ Add Row</button>
             <button class="remove-row" onclick="removeRow()">- Remove Row</button>
-            <button class="save-button" onclick="saveToGoogleSheets()">Simpan ke Cloud</button>
+            <button class="save-button" onclick="saveData()">Simpan Data</button>
             <button class="bbcode-button" onclick="generateBBCode()">Generate BBCode</button>
         </div>
 
@@ -643,9 +557,9 @@
             { name: "Devanarley Wyattavery", rank: "Medical Director", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
             { name: "Flovino Neophytus", rank: "Attending Physician", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
             { name: "Hank Mccormick", rank: "Attending Physician", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
-            { name: "Sano Franzi", rank: "Fellow", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
             { name: "Bastian Adler", rank: "Fellow", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
             { name: "Olivia Gabriella", rank: "Fellow", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
+            { name: "Sano Franzi", rank: "Fellow", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
             { name: "Dalton Morbidelli", rank: "Resident", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
             { name: "Stefano Liang", rank: "Resident", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
             { name: "Zac Whittle", rank: "Resident", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
@@ -670,294 +584,27 @@
         // Variabel untuk menyimpan data Excel
         let excelData = null;
 
-        // Variabel untuk Google Sheets
-        let googleSheetsUrl = '';
-        let isGoogleSheetsSetup = false;
-        let syncInterval = null;
+        // Key untuk menyimpan data
+        const STORAGE_KEY = 'hospital_bonus_data';
+        const WEEK_KEY = 'hospital_bonus_week';
 
-        // Key untuk localStorage
-        const SHEETS_URL_KEY = 'hospital_bonus_sheets_url';
-        const LOCAL_DATA_KEY = 'hospital_bonus_data_backup';
-
-        // Fungsi untuk update status sinkronisasi
-        function updateSyncStatus(status, message) {
-            const syncStatus = document.getElementById('sync-status');
-            syncStatus.textContent = message || status;
-            syncStatus.className = 'sync-status ' + status;
-        }
-
-        // Fungsi untuk setup Google Sheets
-        function setupGoogleSheets() {
-            const url = document.getElementById('sheets-url').value.trim();
-            
-            if (!url) {
-                alert('Silakan masukkan URL Google Sheets terlebih dahulu.');
-                return;
-            }
-
-            // Validasi URL Google Sheets
-            if (!url.includes('docs.google.com/spreadsheets')) {
-                alert('URL harus berupa Google Sheets yang valid.');
-                return;
-            }
-
-            googleSheetsUrl = url;
-            
-            // Simpan URL ke localStorage
-            localStorage.setItem(SHEETS_URL_KEY, googleSheetsUrl);
-            
-            // Convert ke URL publik
-            const publicUrl = convertToPublicUrl(googleSheetsUrl);
-            
-            // Test koneksi
-            testGoogleSheetsConnection(publicUrl)
-                .then(() => {
-                    updateSyncStatus('connected', 'Terhubung');
-                    isGoogleSheetsSetup = true;
-                    
-                    // Mulai sinkronisasi otomatis
-                    startAutoSync();
-                    
-                    alert('Google Sheets berhasil di-setup! Data akan otomatis tersinkronisasi setiap 30 detik.');
-                })
-                .catch(error => {
-                    updateSyncStatus('disconnected', 'Gagal terhubung');
-                    console.error('Error setting up Google Sheets:', error);
-                    alert('Gagal terhubung ke Google Sheets. Pastikan URL benar dan sheet sudah dibagikan secara publik.');
-                });
-        }
-
-        // Fungsi untuk convert URL ke format publik
-        function convertToPublicUrl(url) {
-            // Extract document ID dari URL
-            const match = url.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
-            if (match && match[1]) {
-                const sheetId = match[1];
-                return `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv`;
-            }
-            return url;
-        }
-
-        // Fungsi untuk test koneksi Google Sheets
-        function testGoogleSheetsConnection(url) {
-            return new Promise((resolve, reject) => {
-                fetch(url)
-                    .then(response => {
-                        if (response.ok) {
-                            resolve();
-                        } else {
-                            reject(new Error('Failed to fetch'));
-                        }
-                    })
-                    .catch(reject);
-            });
-        }
-
-        // Fungsi untuk load data dari Google Sheets
-        function loadFromGoogleSheets() {
-            if (!googleSheetsUrl) {
-                alert('Silakan setup Google Sheets terlebih dahulu.');
-                return;
-            }
-
-            updateSyncStatus('syncing', 'Memuat data...');
-
-            const publicUrl = convertToPublicUrl(googleSheetsUrl);
-            
-            fetch(publicUrl)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.text();
-                })
-                .then(csvText => {
-                    // Parse CSV data
-                    const rows = parseCSV(csvText);
-                    
-                    if (rows.length > 1) {
-                        // Convert CSV rows ke format employees
-                        const loadedEmployees = convertCSVToEmployees(rows);
-                        
-                        if (loadedEmployees.length > 0) {
-                            employees = loadedEmployees;
-                            renderSpreadsheet();
-                            updateSyncStatus('connected', 'Data dimuat');
-                            
-                            // Simpan backup ke localStorage
-                            saveLocalBackup();
-                            
-                            alert('Data berhasil dimuat dari Google Sheets!');
-                        } else {
-                            throw new Error('Format data tidak sesuai');
-                        }
-                    } else {
-                        // Jika sheet kosong, gunakan data default
-                        employees = JSON.parse(JSON.stringify(defaultEmployees));
-                        renderSpreadsheet();
-                        updateSyncStatus('connected', 'Sheet kosong');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error loading from Google Sheets:', error);
-                    updateSyncStatus('disconnected', 'Gagal memuat');
-                    alert('Gagal memuat data dari Google Sheets. Menggunakan data lokal.');
-                    
-                    // Coba load dari backup lokal
-                    loadLocalBackup();
-                });
-        }
-
-        // Fungsi untuk save data ke Google Sheets
-        function saveToGoogleSheets() {
-            if (!googleSheetsUrl) {
-                alert('Silakan setup Google Sheets terlebih dahulu.');
-                return;
-            }
-
-            updateSyncStatus('syncing', 'Menyimpan...');
-
-            // Untuk Google Sheets, kita perlu menggunakan Google Apps Script
-            // Karena keterbatasan browser, kita akan simpan data dalam format yang bisa di-copy-paste
-            const csvData = convertEmployeesToCSV();
-            
-            // Buat blob untuk download
-            const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement('a');
-            const url = URL.createObjectURL(blob);
-            
-            link.setAttribute('href', url);
-            link.setAttribute('download', 'hospital_bonus_data.csv');
-            link.style.visibility = 'hidden';
-            
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            
-            updateSyncStatus('connected', 'CSV siap download');
-            
-            alert('Data telah diekspor ke CSV. Silakan buka Google Sheets Anda dan:\n\n1. Buka Sheets yang sudah di-setup\n2. Hapus semua data yang ada\n3. Copy-paste isi file CSV yang didownload\n\nData akan otomatis tersinkronisasi ke semua client!');
-            
-            // Simpan backup lokal
-            saveLocalBackup();
-        }
-
-        // Fungsi untuk memulai sinkronisasi otomatis
-        function startAutoSync() {
-            // Load data pertama kali
-            loadFromGoogleSheets();
-            
-            // Set interval untuk sinkronisasi otomatis setiap 30 detik
-            if (syncInterval) {
-                clearInterval(syncInterval);
-            }
-            
-            syncInterval = setInterval(() => {
-                if (isGoogleSheetsSetup) {
-                    loadFromGoogleSheets();
-                }
-            }, 30000); // 30 detik
-        }
-
-        // Fungsi untuk parse CSV
-        function parseCSV(csvText) {
-            const rows = [];
-            const lines = csvText.split('\n');
-            
-            for (let line of lines) {
-                // Handle quoted fields that may contain commas
-                const regex = /(?:,|^)(?:"([^"]*(?:""[^"]*)*)"|([^",]*))/g;
-                const fields = [];
-                let match;
-                
-                while ((match = regex.exec(line)) !== null) {
-                    fields.push(match[1] ? match[1].replace(/""/g, '"') : match[2]);
-                }
-                
-                if (fields.length > 0) {
-                    rows.push(fields);
-                }
-            }
-            
-            return rows;
-        }
-
-        // Fungsi untuk convert CSV ke format employees
-        function convertCSVToEmployees(rows) {
-            const employees = [];
-            
-            // Skip header row
-            for (let i = 1; i < rows.length; i++) {
-                const row = rows[i];
-                if (row.length >= 9) {
-                    employees.push({
-                        name: row[1] || '',
-                        rank: row[2] || 'Resident',
-                        absence: row[3] || 'No Absence',
-                        absenceLink: row[4] || '',
-                        inputZone: row[5] || '',
-                        bonus: row[6] || '',
-                        penalty: row[7] || '0',
-                        conclusion: row[8] || 'No Penalty'
-                    });
-                }
-            }
-            
-            return employees;
-        }
-
-        // Fungsi untuk convert employees ke CSV
-        function convertEmployeesToCSV() {
-            const headers = ['Order', 'Name', 'Rank', 'Absence Status', 'Absence Link', 'Input Zone', 'Bonus', 'Penalty', 'Conclusion'];
-            let csv = headers.join(',') + '\n';
-            
-            employees.forEach((emp, index) => {
-                const row = [
-                    index + 1,
-                    `"${emp.name}"`,
-                    emp.rank,
-                    emp.absence,
-                    emp.absenceLink,
-                    emp.inputZone,
-                    emp.bonus,
-                    emp.penalty,
-                    emp.conclusion
-                ];
-                csv += row.join(',') + '\n';
-            });
-            
-            return csv;
-        }
-
-        // Fungsi untuk save backup lokal
-        function saveLocalBackup() {
-            const dataToSave = {
-                employees: JSON.parse(JSON.stringify(employees)),
-                week: document.getElementById('week-input').value,
-                timestamp: new Date().toISOString()
-            };
-            
-            localStorage.setItem(LOCAL_DATA_KEY, JSON.stringify(dataToSave));
-        }
-
-        // Fungsi untuk load backup lokal
-        function loadLocalBackup() {
+        // Fungsi untuk menyimpan data ke localStorage
+        function saveData() {
             try {
-                const savedData = localStorage.getItem(LOCAL_DATA_KEY);
-                if (savedData) {
-                    const parsedData = JSON.parse(savedData);
-                    employees = parsedData.employees || [];
-                    document.getElementById('week-input').value = parsedData.week || 1;
-                    renderSpreadsheet();
-                    console.log('Data berhasil dimuat dari backup lokal');
-                } else {
-                    // Jika tidak ada data tersimpan, gunakan data default
-                    employees = JSON.parse(JSON.stringify(defaultEmployees));
-                    console.log('Menggunakan data default');
-                }
+                const dataToSave = {
+                    employees: JSON.parse(JSON.stringify(employees)),
+                    week: document.getElementById('week-input').value,
+                    timestamp: new Date().toISOString()
+                };
+                
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
+                localStorage.setItem(WEEK_KEY, document.getElementById('week-input').value);
+                
+                showSaveNotification();
+                console.log('Data berhasil disimpan ke localStorage:', dataToSave);
             } catch (error) {
-                console.error('Error loading backup:', error);
-                employees = JSON.parse(JSON.stringify(defaultEmployees));
+                console.error('Error saving data to localStorage:', error);
+                alert('Terjadi kesalahan saat menyimpan data.');
             }
         }
 
@@ -969,6 +616,38 @@
             setTimeout(() => {
                 notification.classList.remove('show');
             }, 3000);
+        }
+
+        // Fungsi untuk memuat data dari localStorage
+        function loadData() {
+            try {
+                const savedData = localStorage.getItem(STORAGE_KEY);
+                const savedWeek = localStorage.getItem(WEEK_KEY);
+                
+                if (savedData) {
+                    const parsedData = JSON.parse(savedData);
+                    employees = parsedData.employees || [];
+                    
+                    if (savedWeek) {
+                        document.getElementById('week-input').value = savedWeek;
+                    }
+                    
+                    console.log('Data berhasil dimuat dari localStorage:', parsedData);
+                    return true;
+                }
+            } catch (error) {
+                console.error('Error loading data from localStorage:', error);
+            }
+            return false;
+        }
+
+        // Fungsi untuk menginisialisasi data
+        function initializeData() {
+            if (!loadData()) {
+                // Jika tidak ada data tersimpan, gunakan data default
+                employees = JSON.parse(JSON.stringify(defaultEmployees));
+                console.log('Menggunakan data default');
+            }
         }
 
         // Fungsi untuk merender spreadsheet
@@ -1009,7 +688,7 @@
                 nameInput.dataset.index = index;
                 nameInput.addEventListener('input', (e) => {
                     employees[e.target.dataset.index].name = e.target.value;
-                    saveLocalBackup();
+                    saveData();
                 });
                 nameCell.appendChild(nameInput);
                 row.appendChild(nameCell);
@@ -1030,7 +709,7 @@
                 rankSelect.addEventListener('change', (e) => {
                     employees[e.target.dataset.index].rank = e.target.value;
                     calculateRow(e.target.dataset.index);
-                    saveLocalBackup();
+                    saveData();
                 });
                 
                 rankCell.appendChild(rankSelect);
@@ -1052,7 +731,7 @@
                 absenceSelect.addEventListener('change', (e) => {
                     employees[e.target.dataset.index].absence = e.target.value;
                     calculateRow(e.target.dataset.index);
-                    saveLocalBackup();
+                    saveData();
                     // Show/hide absence link input based on selection
                     const absenceLinkInput = row.cells[4].querySelector('input');
                     if (e.target.value === "Full Absence") {
@@ -1078,7 +757,7 @@
                 absenceLinkInput.style.display = emp.absence === "Full Absence" ? 'block' : 'none';
                 absenceLinkInput.addEventListener('input', (e) => {
                     employees[e.target.dataset.index].absenceLink = e.target.value;
-                    saveLocalBackup();
+                    saveData();
                 });
                 absenceLinkCell.appendChild(absenceLinkInput);
                 row.appendChild(absenceLinkCell);
@@ -1094,7 +773,7 @@
                 input.addEventListener('input', (e) => {
                     employees[e.target.dataset.index].inputZone = e.target.value;
                     calculateRow(e.target.dataset.index);
-                    saveLocalBackup();
+                    saveData();
                 });
                 inputCell.appendChild(input);
                 row.appendChild(inputCell);
@@ -1232,7 +911,7 @@
                     highlightUpdatedRow(index - 1);
                 }, 100);
                 
-                saveLocalBackup();
+                saveData();
             }
         }
 
@@ -1254,7 +933,7 @@
                     highlightUpdatedRow(index + 1);
                 }, 100);
                 
-                saveLocalBackup();
+                saveData();
             }
         }
 
@@ -1283,7 +962,7 @@
             });
             
             renderSpreadsheet();
-            saveLocalBackup();
+            saveData();
         }
         
         // Fungsi untuk menghapus baris
@@ -1291,7 +970,7 @@
             if (employees.length > 1) {
                 employees.pop();
                 renderSpreadsheet();
-                saveLocalBackup();
+                saveData();
             } else {
                 alert("Tidak dapat menghapus baris terakhir.");
             }
@@ -1306,9 +985,12 @@
                 document.getElementById('excel-file').value = "";
                 excelData = null;
                 
+                // Hapus data dari localStorage
+                localStorage.removeItem(STORAGE_KEY);
+                localStorage.removeItem(WEEK_KEY);
+                
                 renderSpreadsheet();
                 document.getElementById('bbcode-section').style.display = 'none';
-                saveLocalBackup();
                 alert("Data telah direset ke kondisi awal.");
             }
         }
@@ -1397,7 +1079,7 @@
             });
 
             // Save data setelah import
-            saveLocalBackup();
+            saveData();
             
             if (matchedCount > 0) {
                 alert(`Data berhasil diimpor!\n\n` +
@@ -1533,37 +1215,28 @@
             }
         }
         
-        // Inisialisasi aplikasi saat halaman dimuat
+        // Inisialisasi spreadsheet saat halaman dimuat
         document.addEventListener('DOMContentLoaded', () => {
-            // Load URL Google Sheets dari localStorage jika ada
-            const savedSheetsUrl = localStorage.getItem(SHEETS_URL_KEY);
-            if (savedSheetsUrl) {
-                googleSheetsUrl = savedSheetsUrl;
-                document.getElementById('sheets-url').value = savedSheetsUrl;
-                isGoogleSheetsSetup = true;
-                updateSyncStatus('connected', 'Siap sinkron');
-                startAutoSync();
-            }
+            // Inisialisasi data (load dari storage atau gunakan default)
+            initializeData();
             
-            // Load data dari backup lokal
-            loadLocalBackup();
+            // Render spreadsheet
+            renderSpreadsheet();
             
             // Set event listener untuk input week
             document.getElementById('week-input').addEventListener('input', (e) => {
-                saveLocalBackup();
+                // Hapus validasi min/max agar bisa input angka bebas
+                saveData();
             });
             
             // Set event listener untuk file input
             document.getElementById('excel-file').addEventListener('change', handleExcelUpload);
-            
-            console.log('Application initialized with Google Sheets synchronization');
-        });
 
-        // Fungsi untuk kompatibilitas
-        function saveData() {
-            saveToGoogleSheets();
-            showSaveNotification();
-        }
+            // Auto save setiap 30 detik (opsional)
+            setInterval(saveData, 30000);
+            
+            console.log('Application initialized with persistent data');
+        });
     </script>
 </body>
 </html>
