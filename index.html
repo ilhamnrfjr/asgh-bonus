@@ -457,7 +457,6 @@
             }
         }
     </style>
-    <!-- Library untuk parsing Excel -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
@@ -518,7 +517,6 @@
                     </tr>
                 </thead>
                 <tbody id="spreadsheet-body">
-                    <!-- Data akan diisi oleh JavaScript -->
                 </tbody>
                 <tfoot>
                     <tr class="grand-total">
@@ -550,25 +548,26 @@
     </div>
 
     <script>
-        // Data karyawan tetap yang akan selalu ditampilkan
         const defaultEmployees = [
             { name: "Rainer Joyce", rank: "Hospital Executive", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
+            { name: "Devanarley Wyattavery", rank: "Executive Assistant", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
             { name: "Jareth Ashford", rank: "Executive Assistant", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
-            { name: "Devanarley Wyattavery", rank: "Medical Director", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
             { name: "Flovino Neophytus", rank: "Attending Physician", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
             { name: "Hank Mccormick", rank: "Attending Physician", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
+            { name: "Karma Kingswell", rank: "Attending Physician", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
             { name: "Bastian Adler", rank: "Fellow", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
-            { name: "Olivia Gabriella", rank: "Fellow", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
             { name: "Sano Franzi", rank: "Fellow", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
+            { name: "Olivia Gabriella", rank: "Fellow", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
+            { name: "Stefano Liang", rank: "Senior Resident", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
+            { name: "Zac Whittle", rank: "Senior Resident", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
             { name: "Dalton Morbidelli", rank: "Resident", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
-            { name: "Stefano Liang", rank: "Resident", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
-            { name: "Zac Whittle", rank: "Resident", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
+            { name: "Eun Sohee", rank: "Resident", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
+            { name: "Jeevaa Pritchard", rank: "Resident", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
+            { name: "Joseph Wakeponihka", rank: "Resident", absence: "No Absence", absenceLink: "", inputZone: "", bonus: "", penalty: "0", conclusion: "No Penalty" },
         ];
 
-        // Copy data default ke employees untuk ditampilkan
         let employees = [];
 
-        // Opsi untuk dropdown rank
         const rankOptions = [
             "Hospital Executive", 
             "Executive Assistant", 
@@ -579,16 +578,13 @@
             "Resident"
         ];
         
-        const absenceOptions = ["Full Absence", "No Absence"];
+        const absenceOptions = ["Full Absence", "No Absence", "Christmas & Year-End Holiday"];
         
-        // Variabel untuk menyimpan data Excel
         let excelData = null;
 
-        // Key untuk menyimpan data
         const STORAGE_KEY = 'hospital_bonus_data';
         const WEEK_KEY = 'hospital_bonus_week';
 
-        // Fungsi untuk menyimpan data ke localStorage
         function saveData() {
             try {
                 const dataToSave = {
@@ -608,7 +604,6 @@
             }
         }
 
-        // Fungsi untuk menampilkan notifikasi penyimpanan
         function showSaveNotification() {
             const notification = document.getElementById('save-notification');
             notification.classList.add('show');
@@ -618,7 +613,6 @@
             }, 3000);
         }
 
-        // Fungsi untuk memuat data dari localStorage
         function loadData() {
             try {
                 const savedData = localStorage.getItem(STORAGE_KEY);
@@ -641,16 +635,13 @@
             return false;
         }
 
-        // Fungsi untuk menginisialisasi data
         function initializeData() {
             if (!loadData()) {
-                // Jika tidak ada data tersimpan, gunakan data default
                 employees = JSON.parse(JSON.stringify(defaultEmployees));
                 console.log('Menggunakan data default');
             }
         }
 
-        // Fungsi untuk merender spreadsheet
         function renderSpreadsheet() {
             const tbody = document.getElementById('spreadsheet-body');
             tbody.innerHTML = '';
@@ -658,7 +649,6 @@
             employees.forEach((emp, index) => {
                 const row = document.createElement('tr');
                 
-                // Kolom Move Buttons
                 const moveCell = document.createElement('td');
                 const moveButtons = document.createElement('div');
                 moveButtons.classList.add('move-buttons');
@@ -680,7 +670,6 @@
                 moveCell.appendChild(moveButtons);
                 row.appendChild(moveCell);
                 
-                // Kolom Name
                 const nameCell = document.createElement('td');
                 const nameInput = document.createElement('input');
                 nameInput.type = 'text';
@@ -693,7 +682,6 @@
                 nameCell.appendChild(nameInput);
                 row.appendChild(nameCell);
                 
-                // Kolom Rank
                 const rankCell = document.createElement('td');
                 const rankSelect = document.createElement('select');
                 rankSelect.dataset.index = index;
@@ -715,7 +703,6 @@
                 rankCell.appendChild(rankSelect);
                 row.appendChild(rankCell);
                 
-                // Kolom Absence Status
                 const absenceCell = document.createElement('td');
                 const absenceSelect = document.createElement('select');
                 absenceSelect.dataset.index = index;
@@ -732,9 +719,8 @@
                     employees[e.target.dataset.index].absence = e.target.value;
                     calculateRow(e.target.dataset.index);
                     saveData();
-                    // Show/hide absence link input based on selection
                     const absenceLinkInput = row.cells[4].querySelector('input');
-                    if (e.target.value === "Full Absence") {
+                    if (e.target.value === "Full Absence" || e.target.value === "Christmas & Year-End Holiday") {
                         absenceLinkInput.style.display = 'block';
                         absenceLinkInput.placeholder = 'https://fire.san-andreas.net/viewtopic.php?t=XXXXX';
                     } else {
@@ -747,14 +733,13 @@
                 absenceCell.appendChild(absenceSelect);
                 row.appendChild(absenceCell);
 
-                // Kolom Absence Link
                 const absenceLinkCell = document.createElement('td');
                 const absenceLinkInput = document.createElement('input');
                 absenceLinkInput.type = 'text';
                 absenceLinkInput.value = emp.absenceLink || '';
                 absenceLinkInput.placeholder = 'https://fire.san-andreas.net/viewtopic.php?t=XXXXX';
                 absenceLinkInput.dataset.index = index;
-                absenceLinkInput.style.display = emp.absence === "Full Absence" ? 'block' : 'none';
+                absenceLinkInput.style.display = (emp.absence === "Full Absence" || emp.absence === "Christmas & Year-End Holiday") ? 'block' : 'none';
                 absenceLinkInput.addEventListener('input', (e) => {
                     employees[e.target.dataset.index].absenceLink = e.target.value;
                     saveData();
@@ -762,7 +747,6 @@
                 absenceLinkCell.appendChild(absenceLinkInput);
                 row.appendChild(absenceLinkCell);
                 
-                // Kolom Input Zone
                 const inputCell = document.createElement('td');
                 const input = document.createElement('input');
                 input.type = 'number';
@@ -778,19 +762,16 @@
                 inputCell.appendChild(input);
                 row.appendChild(inputCell);
                 
-                // Kolom Bonus
                 const bonusCell = document.createElement('td');
                 bonusCell.textContent = formatCurrency(emp.bonus);
                 bonusCell.classList.add('bonus-value');
                 row.appendChild(bonusCell);
                 
-                // Kolom Penalty
                 const penaltyCell = document.createElement('td');
                 penaltyCell.textContent = formatCurrency(emp.penalty);
                 penaltyCell.classList.add('penalty-value');
                 row.appendChild(penaltyCell);
                 
-                // Kolom Conclusion
                 const conclusionCell = document.createElement('td');
                 conclusionCell.textContent = emp.conclusion;
                 conclusionCell.dataset.index = index;
@@ -806,11 +787,9 @@
                 tbody.appendChild(row);
             });
             
-            // Hitung grand total setelah render
             calculateGrandTotal();
         }
         
-        // Fungsi untuk memformat nilai mata uang dengan simbol $
         function formatCurrency(value) {
             if (value === "" || value === null || value === undefined) return "$0";
             const numValue = parseFloat(value);
@@ -818,27 +797,22 @@
             return `$${numValue.toLocaleString()}`;
         }
         
-        // Fungsi untuk menghitung bonus dan penalty per baris
         function calculateRow(index) {
             const employee = employees[index];
             let bonus = parseFloat(employee.inputZone) || 0;
             
-            // Aturan penghitungan bonus
             if (employee.rank === "Hospital Executive" || employee.rank === "Executive Assistant") {
-                // Hospital Executive dan Executive Assistant tidak dikurangi 1500
                 employee.bonus = bonus;
             } else if (employee.absence === "Full Absence") {
-                // Full Absence tidak dikurangi 1500
+                employee.bonus = bonus;
+            } else if (employee.absence === "Christmas & Year-End Holiday") {
                 employee.bonus = bonus;
             } else if (employee.absence === "No Absence") {
-                // No Absence dikurangi 1500 untuk semua rank lainnya
                 employee.bonus = bonus - 1500;
             } else {
-                // Default (jika ada status lain) tidak dikurangi
                 employee.bonus = bonus;
             }
             
-            // Hitung penalty
             if (employee.bonus < 0) {
                 employee.penalty = Math.abs(employee.bonus);
                 employee.bonus = 0;
@@ -848,14 +822,10 @@
                 employee.conclusion = "No Penalty";
             }
             
-            // Perbarui tampilan baris
             updateRowDisplay(index);
-            
-            // Hitung ulang grand total
             calculateGrandTotal();
         }
         
-        // Fungsi untuk menghitung grand total
         function calculateGrandTotal() {
             let totalBonus = 0;
             let totalPenalty = 0;
@@ -869,22 +839,15 @@
             document.getElementById('grand-total-penalty').textContent = formatCurrency(totalPenalty);
         }
         
-        // Fungsi untuk memperbarui tampilan baris
         function updateRowDisplay(index) {
             const employee = employees[index];
             const rows = document.getElementById('spreadsheet-body').rows;
             
             if (rows[index]) {
-                // Update bonus
                 rows[index].cells[6].textContent = formatCurrency(employee.bonus);
-                
-                // Update penalty
                 rows[index].cells[7].textContent = formatCurrency(employee.penalty);
-                
-                // Update conclusion
                 rows[index].cells[8].textContent = employee.conclusion;
                 
-                // Tambahkan class untuk styling conclusion
                 if (employee.conclusion === "Penalty") {
                     rows[index].cells[8].className = 'conclusion-penalty';
                 } else {
@@ -893,20 +856,14 @@
             }
         }
 
-        // Fungsi untuk memindahkan baris ke atas
         function moveRowUp(index) {
             if (index > 0) {
-                // Tukar posisi dengan baris di atasnya
                 [employees[index], employees[index - 1]] = [employees[index - 1], employees[index]];
                 
-                // Re-render spreadsheet
                 renderSpreadsheet();
-                
-                // Recalculate semua baris yang terpengaruh
                 calculateRow(index - 1);
                 calculateRow(index);
                 
-                // Highlight baris yang dipindah
                 setTimeout(() => {
                     highlightUpdatedRow(index - 1);
                 }, 100);
@@ -915,20 +872,14 @@
             }
         }
 
-        // Fungsi untuk memindahkan baris ke bawah
         function moveRowDown(index) {
             if (index < employees.length - 1) {
-                // Tukar posisi dengan baris di bawahnya
                 [employees[index], employees[index + 1]] = [employees[index + 1], employees[index]];
                 
-                // Re-render spreadsheet
                 renderSpreadsheet();
-                
-                // Recalculate semua baris yang terpengaruh
                 calculateRow(index);
                 calculateRow(index + 1);
                 
-                // Highlight baris yang dipindah
                 setTimeout(() => {
                     highlightUpdatedRow(index + 1);
                 }, 100);
@@ -937,7 +888,6 @@
             }
         }
 
-        // Fungsi untuk highlight baris yang diupdate
         function highlightUpdatedRow(index) {
             const rows = document.getElementById('spreadsheet-body').rows;
             if (rows[index]) {
@@ -948,7 +898,6 @@
             }
         }
         
-        // Fungsi untuk menambah baris
         function addRow() {
             employees.push({
                 name: "New Employee",
@@ -965,7 +914,6 @@
             saveData();
         }
         
-        // Fungsi untuk menghapus baris
         function removeRow() {
             if (employees.length > 1) {
                 employees.pop();
@@ -976,7 +924,6 @@
             }
         }
 
-        // Fungsi untuk reset ke data default
         function resetToDefault() {
             if (confirm("Apakah Anda yakin ingin mereset semua data ke kondisi awal? Data yang tersimpan akan dihapus.")) {
                 employees = JSON.parse(JSON.stringify(defaultEmployees));
@@ -985,7 +932,6 @@
                 document.getElementById('excel-file').value = "";
                 excelData = null;
                 
-                // Hapus data dari localStorage
                 localStorage.removeItem(STORAGE_KEY);
                 localStorage.removeItem(WEEK_KEY);
                 
@@ -995,7 +941,6 @@
             }
         }
         
-        // Fungsi untuk menangani upload file Excel
         function handleExcelUpload(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -1007,29 +952,21 @@
                 const data = new Uint8Array(e.target.result);
                 const workbook = XLSX.read(data, { type: 'array' });
                 
-                // Ambil sheet pertama
                 const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-                
-                // Konversi ke JSON
                 const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
                 
-                // Simpan data untuk digunakan nanti
                 excelData = jsonData;
-                
-                // Tampilkan preview data (opsional)
                 console.log("Data Excel yang diupload:", jsonData);
             };
             reader.readAsArrayBuffer(file);
         }
         
-        // Fungsi untuk import data dari Excel
         function importExcelData() {
             if (!excelData || excelData.length < 2) {
                 alert("Silakan upload file Excel terlebih dahulu.");
                 return;
             }
             
-            // Header seharusnya: Personnel, Rank, Bills Income
             const headers = excelData[0].map(h => h ? h.toString().toLowerCase() : '');
             const personnelIndex = headers.findIndex(h => h.includes('personnel'));
             const billsIndex = headers.findIndex(h => h.includes('bills'));
@@ -1042,7 +979,6 @@
             let matchedCount = 0;
             let updatedRows = [];
             
-            // Buat map dari data Excel untuk pencarian yang lebih efisien
             const excelDataMap = new Map();
             for (let i = 1; i < excelData.length; i++) {
                 const row = excelData[i];
@@ -1056,11 +992,9 @@
                 }
             }
             
-            // Update hanya karyawan yang sudah ada di daftar tetap
             employees.forEach((employee, index) => {
                 const employeeNameLower = employee.name.toLowerCase();
                 
-                // Cari nama yang cocok di data Excel
                 if (excelDataMap.has(employeeNameLower)) {
                     const billsIncome = excelDataMap.get(employeeNameLower);
                     employee.inputZone = billsIncome;
@@ -1070,15 +1004,12 @@
                 }
             });
             
-            // Render ulang spreadsheet
             renderSpreadsheet();
             
-            // Highlight baris yang diupdate
             updatedRows.forEach(index => {
                 setTimeout(() => highlightUpdatedRow(index), 100);
             });
 
-            // Save data setelah import
             saveData();
             
             if (matchedCount > 0) {
@@ -1091,16 +1022,13 @@
                       "Pastikan nama di Excel sama persis dengan nama di sistem.");
             }
             
-            // Log untuk debugging
             console.log(`Matched ${matchedCount} employees from Excel data`);
         }
 
-        // Fungsi untuk generate BBCode
         function generateBBCode() {
             const week = document.getElementById('week-input').value || 37;
             let totalBonus = 0;
             
-            // Hitung total bonus
             employees.forEach(emp => {
                 totalBonus += parseFloat(emp.bonus) || 0;
             });
@@ -1134,21 +1062,16 @@
 
 `;
 
-            // Generate rows untuk setiap employee yang memiliki input zone atau bonus
             employees.forEach(emp => {
                 const bonus = parseFloat(emp.bonus) || 0;
                 const inputZone = parseFloat(emp.inputZone) || 0;
                 
-                // Skip employee yang tidak ada input zone sama sekali (field kosong)
                 if (emp.inputZone === "" || emp.inputZone === null || emp.inputZone === undefined) return;
                 
-                // Termasuk yang input zone = 0 tapi sudah diisi
                 console.log(`Processing ${emp.name}: InputZone=${emp.inputZone}, Bonus=${bonus}`);
 
-                // Tentukan apakah menggunakan [cb] atau [cbf]
                 const cbTag = bonus === 0 ? 'cbf' : 'cb';
                 
-                // Format absence status
                 let absenceStatus = 'N/A';
                 if (emp.absence === 'Full Absence') {
                     if (emp.absenceLink && emp.absenceLink.trim()) {
@@ -1156,22 +1079,24 @@
                     } else {
                         absenceStatus = 'Full Absence';
                     }
+                } else if (emp.absence === 'Christmas & Year-End Holiday') {
+                    if (emp.absenceLink && emp.absenceLink.trim()) {
+                        absenceStatus = `[url=${emp.absenceLink.trim()}]Christmas & Year-End Holiday[/url]`;
+                    } else {
+                        absenceStatus = 'Christmas & Year-End Holiday';
+                    }
                 }
 
-                // Format bonus dengan $ dan format angka
-                const formattedBonus = `$${bonus.toLocaleString()}`;
-
                 bbcode += `[tr]
-[td1=white][color=black][${cbTag}]${emp.name}[/color]
+[td1=white][color=black][${cbTag}]${emp.name}[/color][/td1]
 [td1=white][center]${emp.rank}[/center][/td1]
 [td1=white][center]${absenceStatus}[/center][/td1]
-[td1=white][center]${formattedBonus}[/center][/td1]
+[td1=white][center]$${bonus.toLocaleString()}[/center][/td1]
 [/tr]
 
 `;
             });
 
-            // Add grand total row
             bbcode += `[tr]
 [td1=#007ac4][center][color=white][b]Grand Total[/b][/color][/center]
 [td1=#007ac4][center][/center][/td1]
@@ -1183,24 +1108,20 @@
 
 [space][/space][/divbox]`;
 
-            // Tampilkan hasil BBCode
             document.getElementById('bbcode-output').value = bbcode;
             document.getElementById('bbcode-section').style.display = 'block';
             
-            // Scroll ke section BBCode
             document.getElementById('bbcode-section').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Fungsi untuk copy BBCode ke clipboard
         function copyBBCode() {
             const bbcodeOutput = document.getElementById('bbcode-output');
             bbcodeOutput.select();
-            bbcodeOutput.setSelectionRange(0, 99999); // For mobile devices
+            bbcodeOutput.setSelectionRange(0, 99999);
             
             try {
                 document.execCommand('copy');
                 
-                // Show notification
                 const originalText = document.querySelector('.copy-button').textContent;
                 document.querySelector('.copy-button').textContent = 'Copied!';
                 document.querySelector('.copy-button').style.backgroundColor = '#4caf50';
@@ -1215,24 +1136,16 @@
             }
         }
         
-        // Inisialisasi spreadsheet saat halaman dimuat
         document.addEventListener('DOMContentLoaded', () => {
-            // Inisialisasi data (load dari storage atau gunakan default)
             initializeData();
-            
-            // Render spreadsheet
             renderSpreadsheet();
             
-            // Set event listener untuk input week
             document.getElementById('week-input').addEventListener('input', (e) => {
-                // Hapus validasi min/max agar bisa input angka bebas
                 saveData();
             });
             
-            // Set event listener untuk file input
             document.getElementById('excel-file').addEventListener('change', handleExcelUpload);
 
-            // Auto save setiap 30 detik (opsional)
             setInterval(saveData, 30000);
             
             console.log('Application initialized with persistent data');
